@@ -1265,8 +1265,10 @@ func createCertificate(data *dataBundle) (*certutil.ParsedCertBundle, error) {
 	}
 
 	if data.signingBundle != nil {
-		if len(data.signingBundle.Certificate.AuthorityKeyId) > 0 &&
-			!bytes.Equal(data.signingBundle.Certificate.AuthorityKeyId, data.signingBundle.Certificate.SubjectKeyId) {
+		if (len(data.signingBundle.Certificate.AuthorityKeyId) > 0 &&
+			!bytes.Equal(data.signingBundle.Certificate.AuthorityKeyId, data.signingBundle.Certificate.SubjectKeyId)) ||
+			(len(data.signingBundle.Certificate.AuthorityKeyId) == 0 &&
+ 			!bytes.Equal(data.signingBundle.Certificate.RawIssuer, data.signingBundle.Certificate.RawSubject)) {
 
 			result.CAChain = []*certutil.CertBlock{
 				&certutil.CertBlock{
